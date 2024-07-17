@@ -13,12 +13,10 @@ public class Database : IDatabase
 {
     private readonly IDbConnection _connection;
 
-    public Database()
+    public Database(string? connectionDb, string? databaseType)
     {
-        var connectionDb = Environment.GetEnvironmentVariable("DB_URI");
         Guard.Against.NullOrWhiteSpace(connectionDb, nameof(connectionDb), "Environment variable 'DB_URI' not found.");
 
-        var databaseType = Environment.GetEnvironmentVariable("DB_TYPE");
         Guard.Against.NullOrWhiteSpace(databaseType, nameof(databaseType), "Environment variable 'DB_TYPE' not found.");
 
         _connection = CreateConnection(databaseType, connectionDb);
@@ -42,6 +40,33 @@ public class Database : IDatabase
         {
             var result = _connection.Query<string>(sql);
             return result.AsList().ToArray();
+        }
+        finally
+        {
+            _connection.Close();
+        }
+    }
+
+    public void CleanSoftDelete(string tableName, string columnName, int daysThreshold)
+    {
+        var sql = _connection switch
+        {
+            MySqlConnection =>
+                $"DELETE FROM {tableName} WHERE {columnName} IS NOT NULL AND {columnName} < DATE_SUB(NOW(), INTERVAL @DaysThreshold DAY);",
+            NpgsqlConnection =>
+                $"DELETE FROM {tableName} WHERE {columnName} IS NOT NULL AND {columnName} < NOW() - INTERVAL @DaysThreshold ' days';",
+            SqlConnection =>
+                $"DELETE FROM {tableName} WHERE {columnName} IS NOT NULL AND {columnName} < DATEADD(day, -@DaysThreshold, GETDATE());",
+            OracleConnection =>
+                $"DELETE FROM {tableName} WHERE {columnName} IS NOT NULL AND {columnName} < SYSDATE - @DaysThreshold;",
+            FbConnection =>
+                $"DELETE FROM {tableName} WHERE {columnName} IS NOT NULL AND {columnName} < DATEADD(-@DaysThreshold DAY TO CURRENT_DATE);",
+            _ => throw new NotSupportedException($"The connection type '{_connection.GetType()}' is not supported.")
+        };
+        _connection.Open();
+        try
+        {
+            _connection.Execute(sql, new { DaysThreshold = daysThreshold });
         }
         finally
         {

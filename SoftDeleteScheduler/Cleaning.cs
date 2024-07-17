@@ -27,8 +27,10 @@ public class Cleaning
 
     private void Progress(string tableName)
     {
-        var columnName = "DeletedAt";
+        var columnName = Environment.GetEnvironmentVariable("COLUMN_DELETEDAT") ?? "deleted_at";
+        var daysThreshold = Environment.GetEnvironmentVariable("DAY_THRESHOLD") ?? "30";
+
         if (_database.ColumnExists(tableName, columnName))
-            _database.ExecuteQuery($"DELETE FROM {tableName} WHERE {columnName} IS NOT NULL");
+            _database.CleanSoftDelete(tableName, columnName, int.Parse(daysThreshold));
     }
 }
