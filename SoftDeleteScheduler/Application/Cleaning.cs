@@ -1,6 +1,7 @@
 ﻿using Serilog;
+using SoftDeleteScheduler.Infrastructure;
 
-namespace SoftDeleteScheduler;
+namespace SoftDeleteScheduler.Application;
 
 public class Cleaning
 {

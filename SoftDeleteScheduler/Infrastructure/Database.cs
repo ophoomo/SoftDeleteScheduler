@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 using Npgsql;
 using Oracle.ManagedDataAccess.Client;
 
-namespace SoftDeleteScheduler;
+namespace SoftDeleteScheduler.Infrastructure;
 
 public class Database : IDatabase
 {

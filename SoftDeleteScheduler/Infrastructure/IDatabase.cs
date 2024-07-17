@@ -1,4 +1,4 @@
-﻿namespace SoftDeleteScheduler;
+﻿namespace SoftDeleteScheduler.Infrastructure;
 
 public interface IDatabase
 {
