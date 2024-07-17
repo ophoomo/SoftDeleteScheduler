@@ -5,22 +5,29 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PublishAot>true</PublishAot>
+        <PublishAot>false</PublishAot>
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="dotenv.net" Version="3.2.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-      <PackageReference Include="Serilog" Version="4.0.0" />
-      <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+        <PackageReference Include="Ardalis.GuardClauses" Version="4.6.0"/>
+        <PackageReference Include="Dapper" Version="2.1.35"/>
+        <PackageReference Include="DotNetEnv" Version="3.0.0"/>
+        <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.3.1"/>
+        <PackageReference Include="MySql.Data" Version="9.0.0"/>
+        <PackageReference Include="Npgsql" Version="8.0.3"/>
+        <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.5.0"/>
+        <PackageReference Include="Quartz" Version="3.11.0"/>
+        <PackageReference Include="Serilog" Version="4.0.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.6"/>
     </ItemGroup>
 
 </Project>
