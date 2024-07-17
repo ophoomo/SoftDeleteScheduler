@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DotNetEnv;
 using Serilog;
+using SoftDeleteScheduler;
 
-#if DEBUG
-dotenv.net.DotEnv.Load();
-#endif
+Env.Load();
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
+
+var context = new Database();
+var cleaning = new Cleaning(context);
+cleaning.Start();
